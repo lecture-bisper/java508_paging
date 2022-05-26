@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Title</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+          crossorigin="anonymous"></script>
+</head>
+<body>
+  <main class="container">
+    <div class="row">
+      <div class="col-md">
+        <table class="table table-hover table-striped">
+          <thead>
+            <th>ID</th>
+            <th>Name</th>
+            <th>CountryCode</th>
+            <th>District</th>
+            <th>Population</th>
+          </thead>
+          <tbody>
+            <tr th:if="${#lists.size(cityList.getList())} > 0" th:each="item : ${cityList.getList()}">
+              <td th:text="${item.id}"></td>
+              <td th:text="${item.name}"></td>
+              <td th:text="${item.countryCode}"></td>
+              <td th:text="${item.district}"></td>
+              <td th:text="${item.population}"></td>
+            </tr>
+            <tr th:unless="${#lists.size(cityList.getList())} > 0">
+              <td colspan="5" class="text-center">데이터가 없습니다.</td>
+            </tr>
+          </tbody>
+        </table>
+<!--        <p th:text="${cityList}"></p>-->
+        <nav>
+          <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${cityList.getPrePage() == 0} ? 'disabled'">
+              <a class="page-link" th:href="@{/cityPaging(pageNum=${cityList.getPrePage()})}">Prev</a>
+            </li>
+<!--            #numbers.sequence(1, 10) : 타임리프의 객체 중 하나로 숫자로 이루어진 배열을 생성, 첫번째 매개변수의 수부터 두번째 매개번수의 수까지의 배열을 생성 -->
+            <li class="page-item" th:each="item : ${#numbers.sequence(cityList.getNavigateFirstPage(), cityList.getNavigateLastPage())}" th:classappend="${item == cityList.getPageNum()} ? 'active'">
+              <a class="page-link" th:text="${item}" th:href="@{/cityPaging(pageNum=${item})}"></a>
+            </li>
+            <li class="page-item" th:classappend="${cityList.getNextPage() == 0} ? 'disabled'">
+              <a class="page-link" th:href="@{/cityPaging(pageNum=${cityList.getNextPage()})}">Next</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
